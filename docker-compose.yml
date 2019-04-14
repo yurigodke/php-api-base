@@ -1,0 +1,32 @@
+version: "3"
+services:
+  apache:
+    build: ./docker-php
+    ports:
+      - 8080:80
+    links:
+      - mysql
+    volumes:
+      - $PWD:/var/www/html
+    networks:
+      devnet:
+        ipv4_address: "156.0.0.3"
+  mysql:
+    image: mysql:5.7
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: pwroot
+      MYSQL_DATABASE: exampledb
+      MYSQL_USER: example
+      MYSQL_PASSWORD: pwdef
+    volumes:
+      - /var/lib/mysql
+    networks:
+      - devnet
+networks:
+  devnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 156.0.0.0/16
