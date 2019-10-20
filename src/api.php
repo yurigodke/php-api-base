@@ -10,33 +10,51 @@
  * )
  */
 
-use \Slim\App as SlimApi;
-use \Monolog\Logger;
-use \Monolog\Handler\StreamHandler;
+define('CONFIGFILE', SRCPATH . '/config.php');
 
-$app = new SlimApi();
+$environment = 'prod';
 
-$container = $app->getContainer();
-unset($container['errorHandler']);
-unset($container['phpErrorHandler']);
+if (array_key_exists('ENVIRONMENT', $_ENV)) {
+	$environment = $_ENV['ENVIRONMENT'];
+}
 
-$container['logger'] = function($c) {
-	$logger = new Logger('example');
-	$file_handler = new StreamHandler('/var/www/logs/' . date('Ymd') . '.log');
-	$logger->pushHandler($file_handler);
-	return $logger;
-};
+define('ENVIRONMENT', $environment);
 
-$container['notFoundHandler'] = function ($c) {
-	return function ($request, $response) use ($c) {
-		$data = array(
-			'error' => 'Page not found'
-		);
+if (file_exists(CONFIGFILE)) {
+	include(CONFIGFILE);
 
-		return $response->withJson($data, 404);
-	};
-};
+	echo DBHOST;
+} else {
+	header('Location: /config/create');
+}
 
-include(__DIR__ . '/routes/examples.php');
-
-$app->run();
+// use \Slim\App as SlimApi;
+// use \Monolog\Logger;
+// use \Monolog\Handler\StreamHandler;
+//
+// $app = new SlimApi();
+//
+// $container = $app->getContainer();
+// unset($container['errorHandler']);
+// unset($container['phpErrorHandler']);
+//
+// $container['logger'] = function($c) {
+// 	$logger = new Logger('example');
+// 	$file_handler = new StreamHandler('/var/www/logs/' . date('Ymd') . '.log');
+// 	$logger->pushHandler($file_handler);
+// 	return $logger;
+// };
+//
+// $container['notFoundHandler'] = function ($c) {
+// 	return function ($request, $response) use ($c) {
+// 		$data = array(
+// 			'error' => 'Page not found'
+// 		);
+//
+// 		return $response->withJson($data, 404);
+// 	};
+// };
+//
+// // include(__DIR__ . '/routes/examples.php');
+//
+// $app->run();

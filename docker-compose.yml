@@ -8,6 +8,8 @@ services:
       - mysql
     volumes:
       - $PWD:/var/www/html
+    environment:
+      ENVIRONMENT: local
     networks:
       devnet:
         ipv4_address: "156.0.0.3"
