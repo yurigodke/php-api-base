@@ -12,14 +12,6 @@
 
 define('CONFIGFILE', SRCPATH . '/config.php');
 
-$environment = 'prod';
-
-if (array_key_exists('ENVIRONMENT', $_ENV)) {
-	$environment = $_ENV['ENVIRONMENT'];
-}
-
-define('ENVIRONMENT', $environment);
-
 if (file_exists(CONFIGFILE)) {
 	include(CONFIGFILE);
 

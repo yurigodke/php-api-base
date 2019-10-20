@@ -1,3 +1,10 @@
+<?php
+$configFile = SRCPATH . '/config.php';
+
+if (file_exists($configFile)) {
+	include($configFile);
+}
+?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 	<head>
