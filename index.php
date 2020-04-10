@@ -13,18 +13,30 @@ if (array_key_exists('ENVIRONMENT', $_ENV)) {
 define('ENVIRONMENT', $environment);
 
 $requestUri = $_SERVER['REQUEST_URI'];
-$requestUriList = array_filter(explode('/', $requestUri));
+$requestUriList = array_values(array_filter(explode('/', $requestUri)));
+
+$configFilePath = BASEPATH . '/src/config.php';
 
 if ($requestUri == '/docs/example.yaml') {
 	$openapi = \OpenApi\scan('./src');
 	header('Content-Type: application/x-yaml');
 	echo $openapi->toYaml();
-} else if ($requestUriList[1] == 'config') {
-	$configPageFile = BASEPATH . '/config/' . $requestUriList[2] . '/index.php';
+} else if ($requestUriList[0] == 'config') {
+		$configPageName = 'user';
 
-	if (is_file($configPageFile)) {
-		include($configPageFile);
-	}
+		if (isset($requestUriList[1])) {
+			$configPageName = $requestUriList[1];
+		}
+
+		$configPageFile = BASEPATH . '/config/' . $configPageName . '/index.php';
+
+		if (is_file($configPageFile)) {
+			include($configPageFile);
+		}
 } else {
-	include('src/api.php');
+	if (is_file($configFilePath)) {
+		include('src/api.php');
+	} else {
+		header("Location: /config");
+	}
 }
