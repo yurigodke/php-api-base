@@ -19,9 +19,9 @@ services:
       - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: pwroot
-      MYSQL_DATABASE: exampledb
-      MYSQL_USER: example
-      MYSQL_PASSWORD: pwdef
+      MYSQL_DATABASE: oabdb
+      MYSQL_USER: oabus
+      MYSQL_PASSWORD: oabpw
     volumes:
       - /var/lib/mysql
     networks:

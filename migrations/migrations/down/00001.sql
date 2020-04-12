@@ -1,12 +1,12 @@
 -- --------------------------------------------------------
 -- This is the script for migrate DOWN
--- from version '1' to version '0'
+-- from version '2' to version '1'
 --
--- This is the reverse operation of the script up/00001
+-- This is the reverse operation of the script up/00002
 -- --------------------------------------------------------
 
 BEGIN;
 
-DROP TABLE users;
+DROP TABLE tokens;
 
 COMMIT;

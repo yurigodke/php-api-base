@@ -5,7 +5,7 @@ if ($_POST) {
 	$environments = array('local', 'qa', 'prod');
 
 	$configFileContent = "";
-	$configFileContent .= "switch (ENVIRONMENT) {\n";
+	$configFileContent .= 'switch ($_ENV["ENVIRONMENT"]) {\n';
 	foreach ($environments as $environmentItemName) {
 
 		$configFileContent .= "\tcase '$environmentItemName':\n";

@@ -5,12 +5,12 @@
 
 BEGIN;
 
-CREATE TABLE `example` (
-	`exampleId` INT NOT NULL AUTO_INCREMENT,
-	`name` VARCHAR(60) NOT NULL,
+CREATE TABLE `users` (
+	`userId` INT NOT NULL AUTO_INCREMENT,
 	`email` VARCHAR(80) NOT NULL,
 	`pass` VARCHAR(32) NOT NULL,
-	PRIMARY KEY (`exampleId`),
+	`level` INT(3) NOT NULL,
+	PRIMARY KEY (`userId`),
 	UNIQUE INDEX `email_UNIQUE` (`email` ASC),
 	INDEX `pass_INDEX` (`pass` ASC)
 );

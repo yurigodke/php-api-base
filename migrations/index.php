@@ -1,6 +1,6 @@
 <?php
 $errorMsg = '';
-if ($_SERVER['PHP_AUTH_USER'] != 'migrateUser' || $_SERVER['PHP_AUTH_PW'] != 'migratece') {
+if ($_SERVER['PHP_AUTH_USER'] != 'admin' || $_SERVER['PHP_AUTH_PW'] != 'admin') {
 	header('WWW-Authenticate: Basic realm="My Realm"');
 	header('HTTP/1.0 401 Unauthorized');
 	$errorMsg = 'Texto enviado caso o usuário clique no botão Cancelar';

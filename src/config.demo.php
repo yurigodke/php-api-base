@@ -1,6 +1,6 @@
 <?php
 
-switch (ENVIRONMENT) {
+switch ($_ENV['ENVIRONMENT']) {
 	case 'local':
 		// Data base host name in local environment
 		define("DBHOST", "mysql");
