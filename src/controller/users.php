@@ -67,7 +67,7 @@ class UserController extends Controller {
 	public function getUserList() {
 		$response = array();
 
-			$response['content'] = $this->userModel->getList();
+		$response['content'] = $this->userModel->getList();
 
 		$response['statusCode'] = $response['content']['error'] ? 500 : 200;
 
@@ -103,6 +103,26 @@ class UserController extends Controller {
 			$response['statusCode'] = $response['content']['error'] ? 500 : 200;
 		} else {
 			$response = $prepareInfo;
+		}
+
+		return $response;
+	}
+
+	public function deleteUser($id) {
+		$response = array();
+
+		if (preg_match('/[0-9]+/', $id)) {
+			$response['content'] = $this->userModel->deleteById(array(
+				'userId' => $id
+			));
+
+			$response['statusCode'] = $response['content']['error'] ? 500 : 200;
+		} else {
+			$response['content'] = array(
+				'error' => 'Invalid id.'
+			);
+
+			$response['statusCode'] = 400;
 		}
 
 		return $response;

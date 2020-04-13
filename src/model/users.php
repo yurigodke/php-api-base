@@ -244,4 +244,41 @@ class User extends Model {
 		 return $this->respData;
 	 }
  }
+
+	public function deleteById($id) {
+		$logName = '[model] users.deleteById';
+
+		if ($this->isConnected()) {
+			$queryData = $this->getQueryData('delete', 'users', array(), $id);
+
+			try {
+				$this->conn->beginTransaction();
+				$stmt = $this->conn->prepare($queryData['query']);
+				$this->conn->commit();
+
+				if ($stmt->execute($queryData['data'])) {
+					$this->respData = array();
+
+					$this->logger->debug($logName, array_merge($this->respData, $id));
+				}
+			} catch (PDOException $err) {
+				$this->logger->error($logName, array(
+					'errorId' => $err->errorInfo[1],
+					'message' => $err->errorInfo[2]
+				));
+
+				if ($err->errorInfo[1] == 1062) {
+					$this->respData = array(
+						'error' => 'User already exists.'
+					);
+				} else {
+					$this->respData = array(
+						'error' => 'Could not delete user.'
+					);
+				}
+			}
+
+			return $this->respData;
+		}
+	}
 }

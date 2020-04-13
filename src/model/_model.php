@@ -47,6 +47,11 @@ class Model {
 
 				$query = 'UPDATE ' . $table . ' SET ' . implode(', ', $fields);
 				break;
+			case 'delete':
+			 	if (isset($where)) {
+					$query = 'DELETE FROM ' . $table;
+			 	}
+				break;
 			default:
 				break;
 		}
