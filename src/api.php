@@ -21,7 +21,8 @@ use \Monolog\Handler\StreamHandler;
 
 $routes = array(
 	'users',
-	'recovery'
+	'recovery',
+	'login'
 );
 
 define('CONFIGFILE', SRCPATH . '/config.php');

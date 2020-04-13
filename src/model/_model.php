@@ -68,7 +68,7 @@ class Model {
 				array_push($fields, "$fieldName=:$fieldName");
 			}
 
-			$query .= implode(', ', $fields);
+			$query .= implode(' AND ', $fields);
 		}
 
 		foreach ($data as $name => $info) {

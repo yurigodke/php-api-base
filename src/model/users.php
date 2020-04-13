@@ -114,9 +114,9 @@ class User extends Model {
 
 					if (isset($tableData[0])) {
 						$this->respData = $tableData[0];
-					}
 
-					$this->logger->debug($logName, array_merge($this->respData, $query));
+						$this->logger->debug($logName, array_merge($this->respData, $query));
+					}
 				}
 			} catch (PDOException $err) {
 				$this->logger->error($logName, array(

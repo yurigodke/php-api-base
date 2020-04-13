@@ -1,5 +1,5 @@
 <?php
-class Recovery extends Model {
+class Login extends Model {
 	function __construct() {
 		global $app;
 		$container = $app->getContainer();
@@ -21,15 +21,19 @@ class Recovery extends Model {
 
 	/**
 	 * @OA\Schema (
-	 * 	schema="recoveryPass",
+	 * 	schema="loginUser",
 	 * 	@OA\Property(
 	 * 		property="email",
+	 * 		type="string"
+	 * 	),
+	 * 	@OA\Property(
+	 * 		property="pass",
 	 * 		type="string"
 	 * 	)
 	 * )
 	 */
-	public function sendRecovery($paramsData, $emailTo) {
-		$logName = '[model] recovery.sendRecovery';
+	public function registerLogin($paramsData) {
+		$logName = '[model] recovery.registerLogin';
 
 		if ($this->isConnected()) {
 			$queryData = $this->getQueryData('insert', 'tokens', $paramsData);
@@ -40,23 +44,9 @@ class Recovery extends Model {
 				$this->conn->commit();
 
 				if ($stmt->execute($queryData['data'])) {
-					$email = new Email();
-
-					$email->addAddress($emailTo);
-
-					$email->setTemplate('passRecoveryInfo', array(
-						'token' => $paramsData['tokenId']['value']
-					));
-
-					$sendStatus = $email->send();
-
 					$this->respData = array(
-						'sended' => $sendStatus
+						'token' => $paramsData['tokenId']['value']
 					);
-
-					if (!$sendStatus) {
-						$this->respData['error'] = $email->ErrorInfo;
-					}
 
 					$this->logger->debug($logName, $this->respData);
 				}
@@ -67,7 +57,7 @@ class Recovery extends Model {
 				));
 
 				$this->respData = array(
-					'error' => 'Could not recovery pass.'
+					'error' => 'Could not login user.'
 				);
 			}
 
