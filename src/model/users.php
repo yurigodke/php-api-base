@@ -1,7 +1,4 @@
 <?php
-require(__DIR__ . '/../config.php');
-require(__DIR__ . '/_model.php');
-
 class User extends Model {
 	function __construct() {
 		global $app;
@@ -53,7 +50,7 @@ class User extends Model {
 				if ($stmt->execute($queryData['data'])) {
 					$lastId = $this->conn->lastInsertId();
 
-					$this->getById(array(
+					$this->getByQuery(array(
 						'userId' => $lastId
 					));
 
@@ -101,11 +98,11 @@ class User extends Model {
 	 * 	)
 	 * )
 	 */
-	public function getById($id) {
-		$logName = '[model] users.getById';
+	public function getByQuery($query) {
+		$logName = '[model] users.getByQuery';
 
 		if ($this->isConnected()) {
-			$queryData = $this->getQueryData('select', 'users', array(), $id);
+			$queryData = $this->getQueryData('select', 'users', array(), $query);
 
 			try {
 				$this->conn->beginTransaction();
@@ -119,7 +116,7 @@ class User extends Model {
 						$this->respData = $tableData[0];
 					}
 
-					$this->logger->debug($logName, array_merge($this->respData, $id));
+					$this->logger->debug($logName, array_merge($this->respData, $query));
 				}
 			} catch (PDOException $err) {
 				$this->logger->error($logName, array(
@@ -220,7 +217,7 @@ class User extends Model {
 			 $this->conn->commit();
 
 			 if ($stmt->execute($queryData['data'])) {
-				 $this->getById($dataId);
+				 $this->getByQuery($dataId);
 
 				 $this->logger->debug($logName, $this->respData);
 			 }
@@ -245,11 +242,11 @@ class User extends Model {
 	 }
  }
 
-	public function deleteById($id) {
+	public function deleteByQuery($query) {
 		$logName = '[model] users.deleteById';
 
 		if ($this->isConnected()) {
-			$queryData = $this->getQueryData('delete', 'users', array(), $id);
+			$queryData = $this->getQueryData('delete', 'users', array(), $query);
 
 			try {
 				$this->conn->beginTransaction();
@@ -259,7 +256,7 @@ class User extends Model {
 				if ($stmt->execute($queryData['data'])) {
 					$this->respData = array();
 
-					$this->logger->debug($logName, array_merge($this->respData, $id));
+					$this->logger->debug($logName, array_merge($this->respData, $query));
 				}
 			} catch (PDOException $err) {
 				$this->logger->error($logName, array(

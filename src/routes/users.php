@@ -2,8 +2,6 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-include(__DIR__ . '/../controller/users.php');
-
 $userCtrl = new UserController();
 
 /**

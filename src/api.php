@@ -10,12 +10,18 @@
  * )
  */
 
+
+include(__DIR__ . '/model/_model.php');
+include(__DIR__ . '/controller/_controller.php');
+include(__DIR__ . '/utils/email.php');
+
 use \Slim\App as SlimApi;
 use \Monolog\Logger;
 use \Monolog\Handler\StreamHandler;
 
 $routes = array(
-	'users'
+	'users',
+	'recovery'
 );
 
 define('CONFIGFILE', SRCPATH . '/config.php');
@@ -47,6 +53,8 @@ if (file_exists(CONFIGFILE)) {
 	};
 
 	foreach ($routes as $routeValue) {
+		include(__DIR__ . "/model/$routeValue.php");
+		include(__DIR__ . "/controller/$routeValue.php");
 		include(__DIR__ . "/routes/$routeValue.php");
 	}
 } else {

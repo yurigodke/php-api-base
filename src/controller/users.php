@@ -1,7 +1,4 @@
 <?php
-include(__DIR__ . '/../model/users.php');
-include(__DIR__ . '/_controller.php');
-
 class UserController extends Controller {
 	function __construct() {
 		global $app;
@@ -38,7 +35,7 @@ class UserController extends Controller {
 
 			$response['statusCode'] = $response['content']['error'] ? 500 : 200;
 		} else {
-			$response = $prepareInfo;
+			$response = $preparedData;
 		}
 
 		return $response;
@@ -48,7 +45,7 @@ class UserController extends Controller {
 		$response = array();
 
 		if (preg_match('/[0-9]+/', $id)) {
-			$response['content'] = $this->userModel->getById(array(
+			$response['content'] = $this->userModel->getByQuery(array(
 				'userId' => $id
 			));
 
@@ -112,7 +109,7 @@ class UserController extends Controller {
 		$response = array();
 
 		if (preg_match('/[0-9]+/', $id)) {
-			$response['content'] = $this->userModel->deleteById(array(
+			$response['content'] = $this->userModel->deleteByQuery(array(
 				'userId' => $id
 			));
 
