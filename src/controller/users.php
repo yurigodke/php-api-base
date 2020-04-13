@@ -73,4 +73,38 @@ class UserController extends Controller {
 
 		return $response;
 	}
+
+	public function editUser($requestData, $id) {
+		$paramsData = array();
+
+		foreach ($requestData as $fieldName => $fieldValue) {
+			$valueApply = $fieldValue;
+			if ($fieldName == 'pass') {
+				$valueApply = md5($fieldValue);
+			}
+
+			$paramsData[$fieldName] = array(
+				'required' => true,
+				'value' => $valueApply
+			);
+		}
+
+		$validData = $this->isValidData($requestData, $paramsData);
+
+		$preparedData = $this->preparData($validData, 'editUser');
+
+		$response = array();
+
+		if ($preparedData === true) {
+			$response['content'] = $this->userModel->edit($paramsData, array(
+				'userId' => $id
+			));
+
+			$response['statusCode'] = $response['content']['error'] ? 500 : 200;
+		} else {
+			$response = $prepareInfo;
+		}
+
+		return $response;
+	}
 }

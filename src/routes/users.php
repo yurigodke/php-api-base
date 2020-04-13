@@ -85,3 +85,69 @@ $app->get('/users/{userId}', function (Request $request, Response $response, arr
 
 	return $response->withJson($dataResponse['content'], $dataResponse['statusCode']);
 });
+
+/**
+ *	@OA\Put(
+ *		path="/users/{userId}",
+ *		tags={"User"},
+ *		summary="Edit user by id",
+ *		@OA\RequestBody(
+ *			@OA\JsonContent(ref="#/components/schemas/addUser")
+ *		),
+ *		@OA\Parameter(
+ *			name="userId",
+ *			in="path",
+ *			required=true,
+ *			@OA\Schema(type="string")
+ *		),
+ *		@OA\Response(
+ *			response=200,
+ *			description="OK",
+ *			@OA\JsonContent(ref="#/components/schemas/getUser")
+ *		)
+ *	)
+ */
+
+$app->put('/users/{userId}', function (Request $request, Response $response, array $args) {
+	global $userCtrl;
+
+	$userId = $args['userId'];
+
+	$payload = $request->getParsedBody();
+	$this->logger->debug('[route] /users', array(
+		'method' => 'PUT',
+		'userId' => $userId
+	));
+
+	$dataResponse = $userCtrl->editUser($payload, $userId);
+
+	return $response->withJson($dataResponse['content'], $dataResponse['statusCode']);
+});
+
+
+/**
+ *	@OA\Delete(
+ *		path="/users/{userId}",
+ *		tags={"User"},
+ *		summary="Delete user by id",
+ *		@OA\Parameter(
+ *			name="userId",
+ *			in="path",
+ *			required=true,
+ *			@OA\Schema(type="string")
+ *		),
+ *		@OA\Response(
+ *			response=200,
+ *			description="OK"
+ *		)
+ *	)
+ */
+
+$app->delete('/users/{userId}', function (Request $request, Response $response, array $args) {
+	global $userCtrl;
+	$userId = $args['userId'];
+
+	$dataResponse = $userCtrl->deleteUser($userId);
+
+	return $response->withJson($dataResponse['content'], $dataResponse['statusCode']);
+});

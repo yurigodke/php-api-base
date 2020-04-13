@@ -207,4 +207,41 @@ class User extends Model {
 			return $this->respData;
 		}
 	}
+
+ public function edit($paramsData, $dataId) {
+	 $logName = '[model] users.edit';
+
+	 if ($this->isConnected()) {
+		 $queryData = $this->getQueryData('update', 'users', $paramsData, $dataId);
+
+		 try {
+			 $this->conn->beginTransaction();
+			 $stmt = $this->conn->prepare($queryData['query']);
+			 $this->conn->commit();
+
+			 if ($stmt->execute($queryData['data'])) {
+				 $this->getById($dataId);
+
+				 $this->logger->debug($logName, $this->respData);
+			 }
+		 } catch (PDOException $err) {
+			 $this->logger->error($logName, array(
+				 'errorId' => $err->errorInfo[1],
+				 'message' => $err->errorInfo[2]
+			 ));
+
+			 if ($err->errorInfo[1] == 1062) {
+				 $this->respData = array(
+					 'error' => 'User already exists.'
+				 );
+			 } else {
+				 $this->respData = array(
+					 'error' => 'Could not register user.'
+				 );
+			 }
+		 }
+
+		 return $this->respData;
+	 }
+ }
 }

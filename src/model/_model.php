@@ -38,6 +38,15 @@ class Model {
 
 				$query = 'SELECT ' . implode(', ', $columns) . ' FROM ' . $table;
 				break;
+			case 'update':
+				$fields = array();
+
+				foreach ($dataValues as $name) {
+					array_push($fields, "$name=:$name");
+				}
+
+				$query = 'UPDATE ' . $table . ' SET ' . implode(', ', $fields);
+				break;
 			default:
 				break;
 		}
