@@ -14,6 +14,7 @@
 include(__DIR__ . '/model/_model.php');
 include(__DIR__ . '/controller/_controller.php');
 include(__DIR__ . '/utils/email.php');
+include(__DIR__ . '/utils/auth.php');
 
 use \Slim\App as SlimApi;
 use \Monolog\Logger;

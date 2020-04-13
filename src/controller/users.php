@@ -19,8 +19,8 @@ class UserController extends Controller {
 				'value' => md5($requestData['pass'])
 			),
 			'level' => array(
-				'required' => true,
-				'value' => $requestData['level']
+				'required' => false,
+				'value' => 1
 			)
 		);
 

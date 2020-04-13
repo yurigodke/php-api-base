@@ -15,7 +15,7 @@ class Login extends Model {
 		} catch (PDOException $e) {
 			$errorMsg = $e->getMessage();
 
-			$this->logger->error('[model] user connection', $errorMsg);
+			$this->logger->error('[model] login connection', $errorMsg);
 		}
 	}
 

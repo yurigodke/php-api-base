@@ -38,6 +38,9 @@ $app->post('/users', function (Request $request, Response $response, array $args
  *	@OA\Get(
  *		path="/users",
  *		tags={"User"},
+ *		security={
+ *			{"token_auth": {}}
+ *		},
  *		summary="Get user list",
  *		@OA\Response(
  *			response=200,
@@ -48,11 +51,19 @@ $app->post('/users', function (Request $request, Response $response, array $args
  */
 
 $app->get('/users', function (Request $request, Response $response, array $args) {
- global $userCtrl;
+	global $userCtrl;
 
- $dataResponse = $userCtrl->getUserList();
+	$auth = new Auth($request);
 
- return $response->withJson($dataResponse['content'], $dataResponse['statusCode']);
+	$authCheck = $auth->allCheck(0, 1);
+
+	if ($authCheck === true) {
+		$dataResponse = $userCtrl->getUserList();
+	} else {
+		$dataResponse = $authCheck;
+	}
+
+	return $response->withJson($dataResponse['content'], $dataResponse['statusCode']);
 });
 
 
@@ -60,6 +71,9 @@ $app->get('/users', function (Request $request, Response $response, array $args)
  *	@OA\Get(
  *		path="/users/{userId}",
  *		tags={"User"},
+ *		security={
+ *			{"token_auth": {}}
+ *		},
  *		summary="Get user by id",
  *		@OA\Parameter(
  *			name="userId",
@@ -79,7 +93,15 @@ $app->get('/users/{userId}', function (Request $request, Response $response, arr
 	global $userCtrl;
 	$userId = $args['userId'];
 
-	$dataResponse = $userCtrl->getUser($userId);
+  $auth = new Auth($request);
+
+	$authCheck = $auth->allCheck(1, 1, $userId); //Level, type, user
+
+	if ($authCheck === true) {
+		$dataResponse = $userCtrl->getUser($userId);
+	} else {
+		$dataResponse = $authCheck;
+	}
 
 	return $response->withJson($dataResponse['content'], $dataResponse['statusCode']);
 });
@@ -88,6 +110,9 @@ $app->get('/users/{userId}', function (Request $request, Response $response, arr
  *	@OA\Put(
  *		path="/users/{userId}",
  *		tags={"User"},
+ *		security={
+ *			{"token_auth": {}}
+ *		},
  *		summary="Edit user by id",
  *		@OA\RequestBody(
  *			@OA\JsonContent(ref="#/components/schemas/addUser")
@@ -117,7 +142,16 @@ $app->put('/users/{userId}', function (Request $request, Response $response, arr
 		'userId' => $userId
 	));
 
-	$dataResponse = $userCtrl->editUser($payload, $userId);
+  $auth = new Auth($request);
+
+	$authCheck = $auth->allCheck(1, 1, $userId); //Level, type, user
+	$authRecoveryCheck = $auth->allCheck(1, 2, $userId); //Level, type, user
+
+	if ($authCheck === true || $authRecoveryCheck === true ) {
+		$dataResponse = $userCtrl->editUser($payload, $userId);
+	} else {
+		$dataResponse = $authCheck;
+	}
 
 	return $response->withJson($dataResponse['content'], $dataResponse['statusCode']);
 });
@@ -127,6 +161,9 @@ $app->put('/users/{userId}', function (Request $request, Response $response, arr
  *	@OA\Delete(
  *		path="/users/{userId}",
  *		tags={"User"},
+ *		security={
+ *			{"token_auth": {}}
+ *		},
  *		summary="Delete user by id",
  *		@OA\Parameter(
  *			name="userId",
@@ -145,7 +182,15 @@ $app->delete('/users/{userId}', function (Request $request, Response $response, 
 	global $userCtrl;
 	$userId = $args['userId'];
 
-	$dataResponse = $userCtrl->deleteUser($userId);
+  $auth = new Auth($request);
+
+	$authCheck = $auth->allCheck(1, 1, $userId); //Level, type, user
+
+	if ($authCheck === true) {
+		$dataResponse = $userCtrl->deleteUser($userId);
+	} else {
+		$dataResponse = $authCheck;
+	}
 
 	return $response->withJson($dataResponse['content'], $dataResponse['statusCode']);
 });

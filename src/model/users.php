@@ -29,10 +29,6 @@ class User extends Model {
 	 * 	@OA\Property(
 	 * 		property="pass",
 	 * 		type="string"
-	 * 	),
-	 * 	@OA\Property(
-	 * 		property="level",
-	 * 		type="number"
 	 * 	)
 	 * )
 	 */
